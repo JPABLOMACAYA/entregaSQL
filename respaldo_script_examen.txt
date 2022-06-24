@@ -96,7 +96,7 @@ insert into Historial_prestamo values
 -- ÍTEM 2.3.a. 
 -- Mostrar todos los libros que posean menos de 300 páginas.
 select Titulo, Nro_paginas from Libro
-	WHERE Nro_paginas < 300;
+	where Nro_paginas < 300;
 
 -- ÍTEM 2.3.b.
 -- Mostrar todos los autores que hayan nacido después del 01-01-1970.

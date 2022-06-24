@@ -1,5 +1,5 @@
---RESOLUCI”N EJERCICIOS PARTE 2
---ÕTEM 2.1.
+--RESOLUCI√ìN EJERCICIOS PARTE 2
+--√çTEM 2.1.
 
 -- CREANDO LA TABLA AUTOR
 create table Autor (
@@ -38,7 +38,7 @@ create table Socio (
 	primary key (RUT)
 );
 
--- CREANDO LA TABLA HISTORIAL PR…STAMO
+-- CREANDO LA TABLA HISTORIAL PR√âSTAMO
 create table Historial_prestamo (
 	ISBN_libro varchar(15),
 	RUT_socio varchar(10),
@@ -55,20 +55,20 @@ select * from Libro;
 select * from Historial_prestamo;
 select * from Socio;
 
---ÕTEM 2.2.
+--√çTEM 2.2.
 --INSERTANDO REGISTROS EN LAS TABLAS
 insert into Autor values 
 	(3, 'Jose Salgado', 1968, 2020),
 	(4, 'Ana Salgado', 1972, null),
-	(1, 'AndrÈs Ulloa', 1982, null),
+	(1, 'Andr√©s Ulloa', 1982, null),
 	(2, 'Sergio Mardones', 1950, 2012),	
 	(5, 'Martin Porta', 1976, null);
 
 insert into Libro values 
 	('111-1111111-111', 'Cuentos de terror', 344, 7),
-	('222-2222222-222', 'PoesÌas contemporaneas', 167, 7),
+	('222-2222222-222', 'Poes√≠as contemporaneas', 167, 7),
 	('333-3333333-333', 'Historia de Asia', 511, 14),
-	('444-4444444-444', 'Manual de mec·nica', 298, 14);
+	('444-4444444-444', 'Manual de mec√°nica', 298, 14);
 
 insert into Autor_libro values 
 	('111-1111111-111', 3, 'Principal'),
@@ -79,10 +79,10 @@ insert into Autor_libro values
 
 insert into Socio values 
 	('1111111-1', 'Juan Soto', 'Avenida 1, Santiago', 911111111),
-	('2222222-2', 'Ana PÈrez', 'Pasaje 2, Santiago', 922222222),
+	('2222222-2', 'Ana P√©rez', 'Pasaje 2, Santiago', 922222222),
 	('3333333-3', 'Sandra Aguilar', 'Avenida 2, Santiago', 933333333),
 	('4444444-4', 'Esteban Jerez', 'Avenida 3, Santiago', 944444444),
-	('5555555-5', 'Silvana MuÒoz', 'Pasaje 3, Santiago', 955555555);
+	('5555555-5', 'Silvana Mu√±oz', 'Pasaje 3, Santiago', 955555555);
 	
 insert into Historial_prestamo values 
 	('111-1111111-111', '1111111-1', '2020-01-20', '2020-01-27'),
@@ -93,36 +93,36 @@ insert into Historial_prestamo values
 	('444-4444444-444', '1111111-1', '2020-01-31', '2020-02-12'),
 	('222-2222222-222', '3333333-3', '2020-01-31', '2020-02-12');  
 
--- ÕTEM 2.3.a. 
--- Mostrar todos los libros que posean menos de 300 p·ginas.
+-- √çTEM 2.3.a. 
+-- Mostrar todos los libros que posean menos de 300 p√°ginas.
 select Titulo, Nro_paginas from Libro
-	WHERE Nro_paginas < 300;
+	where Nro_paginas < 300;
 
--- ÕTEM 2.3.b.
--- Mostrar todos los autores que hayan nacido despuÈs del 01-01-1970.
+-- √çTEM 2.3.b.
+-- Mostrar todos los autores que hayan nacido despu√©s del 01-01-1970.
 select Nombre_autor, Nacimiento_annio from Autor
 	where Nacimiento_annio >= '1970'
 	order by Nacimiento_annio asc;
 
--- ÕTEM 2.3.c.
--- øCu·l es el libro m·s solicitado?
+-- √çTEM 2.3.c.
+-- ¬øCu√°l es el libro m√°s solicitado?
 select Titulo, (select count(ISBN_libro) as Mas_solicitado) from Historial_prestamo
 	join Libro
 	on Historial_prestamo.ISBN_libro = Libro.ISBN
 	group by Titulo
 	order by Mas_solicitado desc;
 
--- ÕTEM 2.3.d.
--- Si se cobrara una multa de $100 por cada dÌa de atraso, mostrar cu·nto 
--- deberÌa pagar cada usuario que entregue el prÈstamo fuera de plazo.
+-- √çTEM 2.3.d.
+-- Si se cobrara una multa de $100 por cada d√≠a de atraso, mostrar cu√°nto 
+-- deber√≠a pagar cada usuario que entregue el pr√©stamo fuera de plazo.
 select Socio.Nombre, (select Fecha_dev_real-(Fecha_prestamo + Libro.Dias_prestamo) as Retraso), 
 (select Fecha_dev_real-(Fecha_prestamo + Libro.Dias_prestamo))*100 as Multa_$ from Historial_prestamo
 	join Socio on Historial_prestamo.RUT_socio = Socio.RUT
 	join Libro on Historial_prestamo.ISBN_libro = Libro.ISBN
 	where Fecha_dev_real-(Fecha_prestamo + Libro.Dias_prestamo) > 0
 	order by Multa_$ desc;
-/*En este ˙ltimo Ìtem se comprobÛ que no era necesario tener en la base de datos un atributo "Fecha_devolucion_esperada" en la tabla
-"Historial_prestamo", ya que bastÛ con sumar a "Fecha_prestamo" el atributo "Dias_prestamo" de la tabla "Libro" 
-para obtener la fecha de expiraciÛn del prÈstamo y calcular los dÌas de retraso respecto a la devoluciÛn real,
+/*En este √∫ltimo √≠tem se comprob√≥ que no era necesario tener en la base de datos un atributo "Fecha_devolucion_esperada" en la tabla
+"Historial_prestamo", ya que bast√≥ con sumar a "Fecha_prestamo" el atributo "Dias_prestamo" de la tabla "Libro" 
+para obtener la fecha de expiraci√≥n del pr√©stamo y calcular los d√≠as de retraso respecto a la devoluci√≥n real,
 siempre que Fecha_dev_real-(Fecha_prestamo + Libro.Dias_prestamo) > 0.
 */
